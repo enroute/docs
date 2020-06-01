@@ -1,0 +1,32 @@
+Origin post:
+http://smallvoid.com/article/winnt-scancode-map.html
+
+It is possible to change the behavior of the different keys on the keyboard by changing the scancode map. This can be used to disable the Windows-key so one is not thrown out of your favorite game, when by accident have pressed the wrong key.
+
+The change the scancode map, so the Windows-key is disabled add/update this binary value:
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
+"Scancode Map"=hex:00,00,00,00,00,00,00,00,03,00,00,00,00,00,5b,e0,00,00,5c,e0,00,00,00,00
+
+For those who wants to know the meaning of the above values here goes:
+
+00,00,00,00	Header: Version. Set to all zeroes.
+00,00,00,00	Header: Flags. Set to all zeroes.
+03,00,00,00	3 entries in the map (including null entry).
+00,00,5b,e0	Left Windows Key (0xe05b) -> Disable (0x00).
+00,00,5c,e0	Right Windows Key (0xe05c) -> Disable (0x00).
+00,00,00,00	Null entry.
+
+To also disable the Shutdown key, one would extend the Scancode Map, so it has 4 entries where the fourth entry becomes ACPI Power Key (0xe0f6) -> Disable (0x00):
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
+"Scancode Map"=hex:00,00,00,00,00,00,00,00,04,00,00,00,00,00,5b,e0,00,00,5c,e0,00,00,f6,e0,00,00,00,00
+
+Note it is also possible to map the the Shutdown keyboard key to become Sleep shortcut by going to Control Panel -> Power Options -> Advanced Tab.
+
+============================================================
+Other maps:
+1d,00,3a,00    Caps Lock as Ctrl
+38,00,38,e0    Right Alt as Left Alt (mostly for emacs in putty)
